@@ -42,7 +42,13 @@ jobs:
         run: cargo build --release --no-default-features
 
       - name: Documentation is complete and its links resolve
-        run: cargo doc --no-deps --all-features
+        # Both configurations, because a firmware build turns the default
+        # features off and documentation whose links only resolve in one of
+        # them is documentation that breaks in the other. Checking only
+        # --all-features let exactly that ship.
+        run: |
+          cargo doc --no-deps --all-features
+          cargo doc --no-deps --no-default-features
         env:
           RUSTDOCFLAGS: "-D warnings"
 

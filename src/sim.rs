@@ -1,6 +1,6 @@
 //! A converter that does not exist, behaving exactly like one that does.
 //!
-//! Every implementation of [`AcquisitionDevice`](crate::AcquisitionDevice)
+//! Every implementation of [`AcquisitionDevice`]
 //! that needs a board is an implementation nobody can review, nobody can run
 //! in CI, and nobody can reproduce a bug in. This one needs a seed.
 //!

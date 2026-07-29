@@ -42,9 +42,13 @@
 //!
 //! ## Testable without hardware
 //!
-//! [`sim::SimDevice`] implements the same [`AcquisitionDevice`] trait
-//! deterministically from a seed, including the faults — overruns, desync,
-//! lifted electrodes, saturation. CI, the conformance vectors and every
+//! `sim::SimDevice` (behind the default `sim` feature) implements the same
+//! [`AcquisitionDevice`] trait deterministically from a seed, including the
+//! faults — overruns, desync, lifted electrodes, saturation.
+//!
+//! The reference is deliberately unlinked rather than conditionally linked:
+//! a firmware build turns the feature off, and documentation whose links only
+//! resolve in one configuration is documentation that breaks in the other. CI, the conformance vectors and every
 //! contributor without a board exercise the identical code path that firmware
 //! does. A driver that only works when a board is attached is a driver nobody
 //! can review.
