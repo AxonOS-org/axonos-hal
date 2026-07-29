@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify the contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+
+      - name: Formatting
+        run: cargo fmt --all -- --check
+
+      # Clippy runs here but was not executable in the environment this crate
+      # was authored in, so it is the one step whose first green is expected to
+      # come from CI rather than from a local run. Everything else in this file
+      # was run to completion before the first commit.
+      - name: Lints
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: Tests
+        run: cargo test --all-features
+
+      - name: The crate really is no_std
+        # Building without default features drops the simulator, which is the
+        # only part that a hosted environment could hide behind. If this step
+        # ever needs `std`, the acquisition path has grown a dependency it
+        # cannot have on a Cortex-M.
+        run: cargo build --release --no-default-features
+
+      - name: Documentation is complete and its links resolve
+        run: cargo doc --no-deps --all-features
+        env:
+          RUSTDOCFLAGS: "-D warnings"
+
+      - name: The published WCRT still equals the sum of its stages
+        # This is the claim the whole timing contract rests on, and it is the
+        # one most likely to rot silently when a stage is retuned.
+        run: cargo test --all-features timing::tests::the_published_wcrt
+
+      - name: Actions are pinned to a commit SHA
+        run: |
+          bad="$(grep -rhoE 'uses: [^ ]+@[A-Za-z0-9._/-]+' .github/workflows/*.yml \
+                 | sed -E 's/[[:space:]]+#.*//' | grep -vE '@[0-9a-f]{40}$' || true)"
+          [ -z "$bad" ] || { echo "::error::unpinned action: $bad"; exit 1; }
+          echo "every action pinned"

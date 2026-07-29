@@ -1,0 +1,22 @@
+[package]
+name = "axonos-hal"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+description = "The contract between AxonOS and silicon: sample frames, a timing budget that refuses to close on impossible configurations, and explicit degradation semantics."
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/AxonOS-org/axonos-hal"
+keywords = ["bci", "eeg", "no-std", "real-time", "hal"]
+categories = ["embedded", "no-std", "hardware-support"]
+
+[dependencies]
+
+[features]
+default = ["sim"]
+# The deterministic backend. On by default because CI, the conformance suite
+# and every contributor without a board depend on it; a firmware build turns
+# it off with --no-default-features.
+sim = []
+
+[profile.release]
+panic = "abort"
