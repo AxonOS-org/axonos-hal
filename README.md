@@ -4,7 +4,7 @@
 
 ### The contract between AxonOS and silicon.
 
-[![Tests](https://img.shields.io/badge/tests-52%20passing-0d7a5f?style=flat-square)](#verification)
+[![Tests](https://img.shields.io/badge/tests-54%20passing-0d7a5f?style=flat-square)](#verification)
 [![no_std](https://img.shields.io/badge/no__std-yes-0a4a8f?style=flat-square)](#constraints)
 [![unsafe](https://img.shields.io/badge/unsafe-forbidden-0a4a8f?style=flat-square)](#constraints)
 [![Allocation](https://img.shields.io/badge/allocation-none-0a4a8f?style=flat-square)](#constraints)
@@ -60,28 +60,32 @@ testing.
 
 ### 2. What time the chain is allowed to take
 
-AxonOS publishes a worst-case response time of 972 µs and jitter of 2.1 µs σ,
-6.5 µs at P99.9. Numbers like those are usually decoration: they sit in
-documentation, nothing checks them, and the day someone adds a pipeline stage
-they quietly stop being true.
+AxonOS publishes two figures measured on the reference platform: an admitted
+task set summing to **694.2 µs**, and an end-to-end worst-case response time of
+**972 µs** (RFC-0001, 12-hour run, 10.8 M epochs). The difference — **277.8 µs,
+28.6 % of the worst case** — is blocking, interference and scheduling overhead.
+It is present in the measurement and was absent from every admission test
+written before RFC-0008.
 
-Here they are inputs to a function that refuses:
+So the test is a response-time test, `R = J + B + C + I ≤ D`, and every term is
+an argument. A term set to zero must still be passed, because a term omitted
+from an API cannot be declared:
 
 ```rust
-TimingBudget::canonical(250)   // Ok — 24.5 % of a 4 ms period
-TimingBudget::canonical(500)   // Ok — 48.9 %
-TimingBudget::canonical(1_000) // Err(InsufficientMargin { 978_500 ppm, limit 800_000 })
-TimingBudget::canonical(2_000) // Err(DeadlineMissed { needed 978_500 ns, available 500_000 })
+TimingBudget::canonical(250)   // Ok — U = 0.174 against the published 0.25
+TimingBudget::canonical(500)   // Err(InsufficientMargin { 347_100, limit 250_000 })
+TimingBudget::canonical(1000)  // Err(InsufficientMargin { 694_200, limit 250_000 })
+TimingBudget::canonical(2000)  // Err(DeadlineMissed { needed 972_000, available 500_000 })
 ```
 
-`AcquisitionDevice::configure` takes a `TimingBudget` by value, and the only way
-to obtain one is to have closed it. **A device cannot be started into a
-configuration whose deadline is unmeetable** — not by policy, by construction.
+The 500 SPS row is the interesting one: the deadline itself is met — 972 µs fits
+inside 2000 µs — and the configuration is inadmissible anyway, because the task
+set claims 34.7 % of a period whose published ceiling is 25 %. **v0.1.1 admitted
+it**, using an 80 % ceiling with no published basis. That is corrected here.
 
-The budget is `const`, so the deadline can be proved at compile time rather than
-discovered at boot. The published 972 µs figure and the per-stage table are the
-same data, and a test asserts they agree: the headline cannot survive a stage
-that no longer adds up.
+`AcquisitionDevice::configure` takes a `TimingBudget` by value, and the only way
+to obtain one is to have closed it. A chain that does not close cannot be
+started — not by policy, by construction.
 
 ### 3. What happens when the hardware misbehaves
 

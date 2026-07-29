@@ -61,7 +61,9 @@ fn a_device_cannot_be_started_into_an_unmeetable_deadline() {
 
 #[test]
 fn a_session_is_reproducible_frame_for_frame() {
-    let budget = TimingBudget::canonical(500).unwrap();
+    // 250 SPS, because 500 is no longer admissible under the published
+    // ceiling of 0.25 — see RFC-0008 D2 and the correction in 0.2.0.
+    let budget = TimingBudget::canonical(250).unwrap();
     let run = |seed: u64| {
         let mut d = SimDevice::new(seed, FaultProfile::FIELD);
         d.configure(budget, Frontend::CANONICAL).unwrap();

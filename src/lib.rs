@@ -67,7 +67,10 @@ pub use frame::{
     code_from_be_bytes, code_to_nanovolts, sign_extend_24, Frontend, LeadOff, SampleFrame,
     CHANNELS, CODE_MAX, CODE_MIN,
 };
-pub use timing::{BudgetError, Stage, TimingBudget, CANONICAL_STAGES, CANONICAL_WCRT_NS};
+pub use timing::{
+    BudgetError, Stage, TimingBudget, CANONICAL_BLOCKING_AND_INTERFERENCE_NS,
+    CANONICAL_EXECUTION_NS, CANONICAL_TASKS, CANONICAL_WCRT_MEASURED_NS,
+};
 
 /// Something the hardware did that the caller must know about.
 ///
