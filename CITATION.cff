@@ -15,7 +15,7 @@ authors:
 repository-code: "https://github.com/AxonOS-org/axonos-hal"
 url: "https://axonos.org"
 abstract: "The contract between AxonOS and silicon: sample frames, a timing budget that refuses configurations whose deadline the measured chain cannot meet, and explicit degradation semantics."
-version: 0.2.1
+version: 0.3.0
 date-released: "2026-08-01"
 license: "Apache-2.0 OR MIT"
 # Copyright 2026 Denis Yermakou. See NOTICE for attribution terms.

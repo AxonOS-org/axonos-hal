@@ -58,6 +58,7 @@
 #![deny(missing_docs)]
 
 pub mod frame;
+pub mod operating;
 pub mod timing;
 
 #[cfg(feature = "sim")]
