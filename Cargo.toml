@@ -1,6 +1,6 @@
 [package]
 name = "axonos-hal"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 rust-version = "1.75"
 description = "The contract between AxonOS and silicon: sample frames, a timing budget that refuses to close on impossible configurations, and explicit degradation semantics."

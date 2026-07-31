@@ -1,0 +1,31 @@
+AxonOS Hardware Abstraction Layer
+Copyright 2026 Denis Yermakou
+
+Authored by Denis Yermakou for The AxonOS Project (https://axonos.org).
+
+This product is dual-licensed under either of
+
+  * Apache License, Version 2.0 (LICENSE-APACHE)
+  * MIT license (LICENSE-MIT)
+
+at your option.
+
+Attribution
+-----------
+Any redistribution, in source or binary form, must retain this NOTICE and the
+copyright attribution above, as required by Apache-2.0 section 4(d).
+
+Intellectual property
+---------------------
+The design, the arithmetic choices and the test vectors in this crate are the
+original work of Denis Yermakou. No patent grant beyond the one stated in
+Apache-2.0 section 3 is offered or implied.
+
+Scope
+-----
+Pre-clinical engineering artifact. Not a medical device, and no clinical claim
+is made or implied.
+
+Contact
+-------
+connect@axonos.org · security@axonos.org · https://axonos.org

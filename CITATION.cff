@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+title: "AxonOS Hardware Abstraction Layer"
+message: "If you use this software, please cite it as below."
+type: software
+# Denis Yermakou is the author; The AxonOS Project is the umbrella the work is
+# published under. Both are listed because a citation should credit the person
+# and locate the project.
+authors:
+  - family-names: "Yermakou"
+    given-names: "Denis"
+    email: "connect@axonos.org"
+    website: "https://axonos.org"
+  - name: "The AxonOS Project"
+    website: "https://axonos.org"
+repository-code: "https://github.com/AxonOS-org/axonos-hal"
+url: "https://axonos.org"
+abstract: "The contract between AxonOS and silicon: sample frames, a timing budget that refuses configurations whose deadline the measured chain cannot meet, and explicit degradation semantics."
+version: 0.2.1
+date-released: "2026-08-01"
+license: "Apache-2.0 OR MIT"
+# Copyright 2026 Denis Yermakou. See NOTICE for attribution terms.
+keywords:
+  - brain-computer-interface
+  - no-std
+  - rust
+  - deterministic
